@@ -1,0 +1,4 @@
+pgsql:
+    user: adloginpoc
+    password: password
+    database: adloginpocdb

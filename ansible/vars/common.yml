@@ -1,0 +1,7 @@
+---
+    php_ppa: php
+    sys_packages: []
+    dist: xenial
+    php_packages: ["php7.2-pgsql", "php7.2-xml", "php7.2-curl", "php7.2-ldap"]
+    pecl_packages: []
+    timezone: Europe/Warsaw

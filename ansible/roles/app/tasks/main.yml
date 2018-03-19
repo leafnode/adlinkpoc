@@ -1,0 +1,70 @@
+---
+#- name: Install Front-end tools
+#  become: yes
+#  apt: pkg={{ item }} state=latest
+#  with_items:
+#    - ruby
+#    - ruby-dev
+#    - curl
+
+#- name: Fetch NodeJS PPA script
+#  shell: "curl -sL https://deb.nodesource.com/setup_4.x -o /tmp/nodesource.sh"
+
+#- name: Add NodeJS PPA
+#  become: yes
+#  shell: "bash /tmp/nodesource.sh"
+
+#- name: Update APT
+#  apt: update_cache=yes
+
+#- name: Install NPM
+#  become: yes
+#  apt: pkg=nodejs state=latest
+
+#- name: Update Rubygems
+#  command: gem update --system
+
+#- name: Install gems
+#  gem: name={{ item }} state=latest
+#  with_items:
+#    - compass
+#    - compass-normalize
+
+#- name: Install gulp
+#  npm: name=gulp global=yes
+
+#- name: Install npm packages
+#  npm: name={{ item }} path=/vagrant state=present
+#  with_items:
+#    - gulp
+#    - gulp-util
+#    - gulp-compass
+#    - gulp-rename
+#    - gulp-uglify
+#    - gulp-concat
+#    - gulp-minify-css
+
+# --- Deploy ---
+- name: Configure app
+  template: src="parameters.yml.dist.tpl" dest="/vagrant/app/config/parameters.yml.dist"
+
+#- name: Install dependencies
+#  composer: command=install working_dir=/vagrant no_dev=no
+#  environment:
+#    SYMFONY_ENV: dev
+
+- name: Update schema
+  shell: "php app/console doctrine:schema:update --force"
+  args:
+    chdir: "/vagrant"
+
+#- name: run gulp
+#  shell: "gulp"
+#  args:
+#    chdir: "/vagrant"
+
+- name: Add test user
+  run_once: true
+  shell: "php app/console fos:user:create testuser test@example.com p@ssword"
+  args:
+      chdir: "/vagrant"

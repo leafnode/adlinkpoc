@@ -1,0 +1,22 @@
+---
+- hosts: dev
+  sudo: true
+  vars:
+    servername: dev adloginpoc dev.adloginpoc.com
+    appdir: /var/www
+    hostname: dev
+  vars_files:
+    - vars/pgsql.yml
+    - vars/common.yml
+    - vars/app.yml
+    - [ "vars/nginxphp.yml", "vars/ws_defaults.yml" ]
+  roles:
+    - init
+    - php7.2-cli
+    - nginx
+    - php7.2-fpm
+    - pgsql
+    - composer
+    - phpcommon
+    - dev
+#    - app

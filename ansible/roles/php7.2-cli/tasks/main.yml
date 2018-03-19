@@ -1,0 +1,13 @@
+- name: Install php7.2-cli
+  become: yes
+  apt: pkg=php7.2-cli state=latest
+
+- name: ensure timezone is set in cli php.ini
+  lineinfile: dest=/etc/php/7.2/cli/php.ini
+              regexp='date.timezone ='
+              line='date.timezone = {{ timezone }}'
+
+- name: ensure xdebug is disabled for cli
+  file:
+    path: /etc/php/7.2/cli/conf.d/20-xdebug.ini
+    state: absent

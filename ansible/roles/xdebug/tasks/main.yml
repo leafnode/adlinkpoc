@@ -1,0 +1,27 @@
+- name: install build tools
+  apt:
+    package: "{{ item }}"
+    state: present
+  with_items:
+    - "build-essential"
+    - "php7.2-dev"
+    - "pkg-php-tools"
+
+- name: build xdebug
+  pear:
+    name: pecl/xdebug
+    state: present
+
+- name: install xdebug config file
+  copy:
+    content: |
+      zend_extension=/usr/lib/php/20151012/xdebug.so
+    dest: /etc/php/7.2/mods-available/xdebug.ini
+  notify: restart fpm
+
+- name: enable xdebug for FPM
+  file:
+    path: /etc/php/7.2/fpm/conf.d/20-xdebug.ini
+    src: /etc/php/7.2/mods-available/xdebug.ini
+    state: link
+  notify: restart fpm
